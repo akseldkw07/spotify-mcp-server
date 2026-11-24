@@ -1,10 +1,12 @@
 import { z } from 'zod';
+import { DESTRUCTIVE, READ, WRITE } from './annotations.js';
 import { defineTool, spotifyId } from './tool.js';
 import type { SpotifyHandlerExtra } from './types.js';
 import { handleSpotifyRequest, spotifyFetch } from './utils.js';
 
 const getPlaylist = defineTool({
   name: 'getPlaylist',
+  annotations: READ,
   description:
     'Get details of a specific Spotify playlist including tracks count, description and owner',
   schema: {
@@ -66,6 +68,7 @@ const getPlaylist = defineTool({
 
 const updatePlaylist = defineTool({
   name: 'updatePlaylist',
+  annotations: DESTRUCTIVE,
   description:
     'Update the details of a Spotify playlist (name, description, public/private, collaborative)',
   schema: {
@@ -148,6 +151,7 @@ const updatePlaylist = defineTool({
 
 const removeTracksFromPlaylist = defineTool({
   name: 'removeTracksFromPlaylist',
+  annotations: DESTRUCTIVE,
   description:
     'Remove one or more tracks from a Spotify playlist (max 100 tracks per request)',
   schema: {
@@ -209,6 +213,7 @@ const removeTracksFromPlaylist = defineTool({
 
 const reorderPlaylistItems = defineTool({
   name: 'reorderPlaylistItems',
+  annotations: WRITE,
   description:
     'Reorder a range of tracks within a Spotify playlist by moving them to a new position',
   schema: {
@@ -279,6 +284,7 @@ const reorderPlaylistItems = defineTool({
 
 const unfollowPlaylist = defineTool({
   name: 'unfollowPlaylist',
+  annotations: DESTRUCTIVE,
   description:
     "Remove a playlist from the current user's library (unfollow). " +
     'Note: Spotify does not allow permanent deletion of playlists via the API.',

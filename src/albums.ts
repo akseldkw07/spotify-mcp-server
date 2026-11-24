@@ -1,11 +1,13 @@
 import type { MaxInt } from '@spotify/web-api-ts-sdk';
 import { z } from 'zod';
+import { DESTRUCTIVE, READ } from './annotations.js';
 import { defineTool } from './tool.js';
 import type { SpotifyHandlerExtra } from './types.js';
 import { formatDuration, handleSpotifyRequest } from './utils.js';
 
 const getAlbums = defineTool({
   name: 'getAlbums',
+  annotations: READ,
   description:
     'Get detailed information about one or more albums by their Spotify IDs',
   schema: {
@@ -108,6 +110,7 @@ const getAlbums = defineTool({
 
 const getAlbumTracks = defineTool({
   name: 'getAlbumTracks',
+  annotations: READ,
   description: 'Get tracks from a specific album with pagination support',
   schema: {
     albumId: z.string().describe('The Spotify ID of the album'),
@@ -190,6 +193,7 @@ const getAlbumTracks = defineTool({
 
 const saveOrRemoveAlbumForUser = defineTool({
   name: 'saveOrRemoveAlbumForUser',
+  annotations: DESTRUCTIVE,
   description: 'Save or remove albums from the user\'s "Your Music" library',
   schema: {
     albumIds: z
@@ -249,6 +253,7 @@ const saveOrRemoveAlbumForUser = defineTool({
 
 const checkUsersSavedAlbums = defineTool({
   name: 'checkUsersSavedAlbums',
+  annotations: READ,
   description: 'Check if albums are saved in the user\'s "Your Music" library',
   schema: {
     albumIds: z

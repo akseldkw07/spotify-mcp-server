@@ -1,5 +1,6 @@
 import type { Artist, MaxInt, Page } from '@spotify/web-api-ts-sdk';
 import { z } from 'zod';
+import { DESTRUCTIVE, READ } from './annotations.js';
 import { defineTool, spotifyId } from './tool.js';
 import type {
   SpotifyEpisode,
@@ -45,6 +46,7 @@ function formatShow(show: SpotifyShow, i: number): string {
 
 const searchSpotify = defineTool({
   name: 'searchSpotify',
+  annotations: READ,
   description:
     'Search for tracks, albums, artists, playlists, podcast episodes, or shows on Spotify. ' +
     'For episodes and shows, the query matches against title, description, and publisher. ' +
@@ -203,6 +205,7 @@ const searchSpotify = defineTool({
 
 const getNowPlaying = defineTool({
   name: 'getNowPlaying',
+  annotations: READ,
   description:
     'Get information about the currently playing track on Spotify, including device and volume info',
   schema: {},
@@ -287,6 +290,7 @@ const getNowPlaying = defineTool({
 
 const getMyPlaylists = defineTool({
   name: 'getMyPlaylists',
+  annotations: READ,
   description: "Get a list of the current user's playlists on Spotify",
   schema: {
     limit: z
@@ -355,6 +359,7 @@ const getMyPlaylists = defineTool({
 
 const getPlaylistTracks = defineTool({
   name: 'getPlaylistTracks',
+  annotations: READ,
   description: 'Get a list of tracks in a Spotify playlist',
   schema: {
     playlistId: spotifyId.describe('The Spotify ID of the playlist'),
@@ -431,6 +436,7 @@ const getPlaylistTracks = defineTool({
 
 const getRecentlyPlayed = defineTool({
   name: 'getRecentlyPlayed',
+  annotations: READ,
   description: 'Get a list of recently played tracks on Spotify',
   schema: {
     limit: z
@@ -491,6 +497,7 @@ const getRecentlyPlayed = defineTool({
 
 const getUsersSavedTracks = defineTool({
   name: 'getUsersSavedTracks',
+  annotations: READ,
   description:
     'Get a list of tracks saved in the user\'s "Liked Songs" library',
   schema: {
@@ -556,6 +563,7 @@ const getUsersSavedTracks = defineTool({
 
 const getQueue = defineTool({
   name: 'getQueue',
+  annotations: READ,
   description:
     'Get a list of the currently playing track and the next items in your Spotify queue',
   schema: {
@@ -648,6 +656,7 @@ const getQueue = defineTool({
 
 const getAvailableDevices = defineTool({
   name: 'getAvailableDevices',
+  annotations: READ,
   description:
     "Get information about the user's available Spotify Connect devices",
   schema: {},
@@ -705,6 +714,7 @@ const getAvailableDevices = defineTool({
 
 const removeUsersSavedTracks = defineTool({
   name: 'removeUsersSavedTracks',
+  annotations: DESTRUCTIVE,
   description:
     'Remove one or more tracks from the user\'s "Liked Songs" library (max 40 per request)',
   schema: {
@@ -766,6 +776,7 @@ const TIME_RANGE_LABEL: Record<TimeRange, string> = {
 
 const getTopTracks = defineTool({
   name: 'getTopTracks',
+  annotations: READ,
   description:
     "Get the current user's top (most-played) tracks over a given time range. " +
     'This is the closest thing Spotify exposes to listening statistics.',
@@ -827,6 +838,7 @@ const getTopTracks = defineTool({
 
 const getTopArtists = defineTool({
   name: 'getTopArtists',
+  annotations: READ,
   description:
     "Get the current user's top (most-played) artists over a given time range. " +
     'This is the closest thing Spotify exposes to listening statistics.',
@@ -891,6 +903,7 @@ const getTopArtists = defineTool({
 
 const getFollowedArtists = defineTool({
   name: 'getFollowedArtists',
+  annotations: READ,
   description:
     'Get the artists the current user follows. Unlike getTopArtists, this ' +
     'reflects artists the user chose to follow rather than listening history.',

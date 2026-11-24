@@ -2,6 +2,7 @@ import type {
   CallToolResult,
   McpServer,
   ServerContext,
+  ToolAnnotations,
 } from '@modelcontextprotocol/server';
 import { z } from 'zod';
 
@@ -15,6 +16,7 @@ export const spotifyId = z
 export function defineTool<Args extends z.ZodRawShape>(definition: {
   name: string;
   description: string;
+  annotations: ToolAnnotations;
   schema: Args;
   handler: (
     args: z.output<z.ZodObject<Args>>,
@@ -28,6 +30,7 @@ export function defineTool<Args extends z.ZodRawShape>(definition: {
         definition.name,
         {
           description: definition.description,
+          annotations: definition.annotations,
           inputSchema: z.object(definition.schema),
         },
         definition.handler,
