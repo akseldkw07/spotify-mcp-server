@@ -39,6 +39,8 @@ jobs:
 
   docker:
     name: Build and publish Docker image
+    # Fork: only upstream builds and publishes container images.
+    if: github.repository == 'marcelmarais/spotify-mcp-server'
     needs: check
     runs-on: ubuntu-latest
     permissions:
