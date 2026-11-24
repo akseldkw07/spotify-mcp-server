@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { WRITE } from './annotations.js';
 import { defineTool, spotifyId } from './tool.js';
 import type { SpotifyHandlerExtra } from './types.js';
 import { handleSpotifyRequest, spotifyFetch } from './utils.js';
@@ -53,6 +54,7 @@ async function ensureActiveDevice(preferredDeviceId?: string): Promise<string> {
 
 const playMusic = defineTool({
   name: 'playMusic',
+  annotations: WRITE,
   description:
     'Start playing a Spotify track, album, artist, or playlist. ' +
     'Pass a Spotify URI (e.g. spotify:track:xxx, spotify:album:xxx) via "uri". ' +
@@ -156,6 +158,7 @@ const playMusic = defineTool({
 
 const pausePlayback = defineTool({
   name: 'pausePlayback',
+  annotations: WRITE,
   description: 'Pause Spotify playback on the active device',
   schema: {
     deviceId: z
@@ -183,6 +186,7 @@ const pausePlayback = defineTool({
 
 const skipToNext = defineTool({
   name: 'skipToNext',
+  annotations: WRITE,
   description: 'Skip to the next track in the current Spotify playback queue',
   schema: {
     deviceId: z
@@ -210,6 +214,7 @@ const skipToNext = defineTool({
 
 const skipToPrevious = defineTool({
   name: 'skipToPrevious',
+  annotations: WRITE,
   description:
     'Skip to the previous track in the current Spotify playback queue',
   schema: {
@@ -238,6 +243,7 @@ const skipToPrevious = defineTool({
 
 const createPlaylist = defineTool({
   name: 'createPlaylist',
+  annotations: WRITE,
   description: 'Create a new playlist on Spotify',
   schema: {
     name: z.string().describe('The name of the playlist'),
@@ -291,6 +297,7 @@ const createPlaylist = defineTool({
 
 const addTracksToPlaylist = defineTool({
   name: 'addTracksToPlaylist',
+  annotations: WRITE,
   description:
     'Add tracks or podcast episodes to a Spotify playlist. ' +
     'Accepts Spotify track IDs, episode IDs, or full Spotify URIs (e.g. spotify:episode:xxx).',
@@ -359,6 +366,7 @@ const addTracksToPlaylist = defineTool({
 
 const resumePlayback = defineTool({
   name: 'resumePlayback',
+  annotations: WRITE,
   description: 'Resume Spotify playback on the active device',
   schema: {
     deviceId: z
@@ -448,6 +456,7 @@ async function collectQueueUris(
 
 const addToQueue = defineTool({
   name: 'addToQueue',
+  annotations: WRITE,
   description:
     'Add items to the end of the playback queue, in order, without interrupting what is playing. ' +
     'Pass `trackIds` to queue several tracks or episodes in one call, or `type` + `id` (or `uri`) ' +
@@ -597,6 +606,7 @@ const addToQueue = defineTool({
 
 const setVolume = defineTool({
   name: 'setVolume',
+  annotations: WRITE,
   description:
     'Set the playback volume to a specific percentage (0-100). Requires Spotify Premium.',
   schema: {
@@ -646,6 +656,7 @@ const setVolume = defineTool({
 
 const adjustVolume = defineTool({
   name: 'adjustVolume',
+  annotations: WRITE,
   description:
     'Adjust the playback volume up or down by a relative amount. Use positive values to increase, negative to decrease. Requires Spotify Premium.',
   schema: {
