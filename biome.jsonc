@@ -10,7 +10,9 @@
       "!**/node_modules",
       "!**/.next",
       "!**/public",
-      "!**/.vercel"
+      "!**/.vercel",
+      // Fork: a symlink to ../mcp-utils (shared hooks); Biome crashes on a path outside the root
+      "!.pre-commit-config.yaml"
     ]
   },
   "vcs": {

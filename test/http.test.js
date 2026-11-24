@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { request } from 'node:http';
-import { connect as connectSocket } from 'node:net';
+import {
+  connect as connectSocket,
+  createServer as createNetServer,
+} from 'node:net';
 import test from 'node:test';
 import {
   Client,
@@ -170,6 +173,16 @@ test('loopback addresses are recognised in any spelling', () => {
   }
 });
 
+function canBind(host) {
+  return new Promise((resolve, reject) => {
+    const probe = createNetServer();
+    probe.once('error', (error) =>
+      error.code === 'EADDRNOTAVAIL' ? resolve(false) : reject(error),
+    );
+    probe.listen(0, host, () => probe.close(() => resolve(true)));
+  });
+}
+
 for (const host of [
   'LOCALHOST',
   'localhost.',
@@ -178,6 +191,12 @@ for (const host of [
   '::ffff:127.0.0.1',
 ]) {
   test(`loopback alias bind ${host} keeps the Host and Origin guards`, async (t) => {
+    // Fork: macOS only configures 127.0.0.1 on lo0, so other 127/8 addresses
+    // can't be bound there without an alias.
+    if (!(await canBind(host))) {
+      t.skip(`${host} is not configured on this machine`);
+      return;
+    }
     const { address, port } = await listen(t, host);
     assert.equal(await post(address, port, { host: 'evil.example' }), 403);
     assert.equal(

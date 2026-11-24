@@ -12,7 +12,8 @@
     "lint": "biome check --diagnostic-level=warn --error-on-warnings",
     "lint:fix": "biome check --write --unsafe",
     "typecheck": "tsc --noEmit",
-    "test": "npm run build && node --test test/*.test.js"
+    "test": "npm run build && node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./test/tdd-guard-reporter.mjs --test-reporter-destination=stdout test/*.test.js",
+    "deploy": "node scripts/deploy.mjs"
   },
   "files": [
     "build"
