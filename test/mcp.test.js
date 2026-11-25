@@ -20,6 +20,7 @@ export const toolNames = [
   'getTopTracks',
   'getTopArtists',
   'getFollowedArtists',
+  'followArtists',
   'playMusic',
   'pausePlayback',
   'skipToNext',
