@@ -125,6 +125,14 @@ Built by Marcel Marais · [Differentiated](https://differentiated.io) · [Linked
     - **Returns**: Formatted list of followed artists with names and IDs (plus popularity and genres when Spotify provides them), and a cursor for the next page when more remain
     - **Example**: `getFollowedArtists({ limit: 50 })`
 
+11. **followArtists**
+
+    - **Description**: Follow one or more artists (max 50 per request)
+    - **Parameters**:
+      - `artistIds` (array): Array of Spotify artist IDs to follow (max 50)
+    - **Returns**: Success confirmation message
+    - **Example**: `followArtists({ artistIds: ["0TnOYISbd1XYRBk9myaseg"] })`
+
 
 ### Play / Create Operations
 
@@ -462,7 +470,7 @@ Environment variables:
 
 **One-time Spotify app setup** (same dashboard as for the other flows): add the redirect URI your MCP client uses for callbacks (e.g. `http://127.0.0.1:3000/oauth/callback` for a local MCPHub dashboard — Spotify rejects `localhost` redirect URIs for new apps, so use `127.0.0.1` or an HTTPS URL) and copy the **client ID** into the client's OAuth configuration. Spotify does not support dynamic client registration, so the client ID must be provided manually. The client secret is only needed by clients that exchange the code using `client_secret_basic`/`client_secret_post`.
 
-Request the **full scope set** advertised in the metadata's `scopes_supported` (15 scopes); if a client requests fewer, tools that need the missing scopes fail with `403`.
+Request the **full scope set** advertised in the metadata's `scopes_supported` (16 scopes); if a client requests fewer, tools that need the missing scopes fail with `403`.
 
 Example MCPHub configuration:
 
@@ -492,7 +500,8 @@ Example MCPHub configuration:
           "user-library-modify",
           "user-read-recently-played",
           "user-top-read",
-          "user-follow-read"
+          "user-follow-read",
+          "user-follow-modify"
         ],
         "resource": "http://127.0.0.1:3000"
       }
@@ -554,7 +563,8 @@ The image needs **no client secret, no refresh token and no `spotify-config.json
              "user-library-modify",
              "user-read-recently-played",
              "user-top-read",
-             "user-follow-read"
+             "user-follow-read",
+          "user-follow-modify"
            ],
            "resource": "http://spotify-mcp:3000"
          }

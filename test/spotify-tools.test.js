@@ -613,3 +613,44 @@ test('playlist IDs that could alter the API path are rejected before any request
     assert.equal(result.isError, true, playlistId);
   }
 });
+
+test('followArtists follows the given artists', async (t) => {
+  mockConfig(t);
+  mockHttp(t, [
+    {
+      url: 'me/following?type=artist',
+      method: 'PUT',
+      body: { ids: ['artist1', 'artist2'] },
+    },
+  ]);
+  const client = await connect(t);
+  const result = await client.callTool({
+    name: 'followArtists',
+    arguments: { artistIds: ['artist1', 'artist2'] },
+  });
+  assert.equal(result.isError, undefined);
+  assert.match(resultText(result), /Now following 2 artists/);
+});
+
+test('followArtists returns the Spotify error as it came', async (t) => {
+  mockConfig(t);
+  mockHttp(t, [
+    {
+      url: 'me/following?type=artist',
+      method: 'PUT',
+      status: 403,
+      response: {
+        error: { status: 403, message: 'Insufficient client scope' },
+      },
+    },
+  ]);
+  const client = await connect(t);
+  const result = await client.callTool({
+    name: 'followArtists',
+    arguments: { artistIds: ['artist1'] },
+  });
+  assert.equal(result.isError, true);
+  const text = result.content[0].text;
+  assert.match(text, /\(403\)/);
+  assert.match(text, /Insufficient client scope/);
+});

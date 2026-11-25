@@ -46,6 +46,7 @@ const expected = {
   createPlaylist: WRITE,
   addTracksToPlaylist: WRITE,
   reorderPlaylistItems: WRITE,
+  followArtists: WRITE,
 
   // Deletes, or overwrites what was there (updatePlaylist replaces the name
   // and description and can make a playlist public).

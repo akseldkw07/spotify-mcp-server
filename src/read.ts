@@ -1,6 +1,6 @@
 import type { Artist, MaxInt, Page } from '@spotify/web-api-ts-sdk';
 import { z } from 'zod';
-import { DESTRUCTIVE, READ } from './annotations.js';
+import { DESTRUCTIVE, READ, WRITE } from './annotations.js';
 import { defineTool, spotifyId } from './tool.js';
 import type {
   SpotifyEpisode,
@@ -966,6 +966,49 @@ const getFollowedArtists = defineTool({
   },
 });
 
+const followArtists = defineTool({
+  name: 'followArtists',
+  annotations: WRITE,
+  description: 'Follow one or more artists (max 50 per request)',
+  schema: {
+    artistIds: z
+      .array(spotifyId)
+      .min(1)
+      .max(50)
+      .describe('Array of Spotify artist IDs to follow (max 50)'),
+  },
+  handler: async (args, _extra: SpotifyHandlerExtra) => {
+    const { artistIds } = args;
+    try {
+      await spotifyFetch('me/following', {
+        method: 'PUT',
+        query: { type: 'artist' },
+        body: { ids: artistIds },
+      });
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `Now following ${artistIds.length} artist${artistIds.length === 1 ? '' : 's'}`,
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        content: [
+          {
+            type: 'text',
+            text: `Error following artists: ${
+              error instanceof Error ? error.message : String(error)
+            }`,
+          },
+        ],
+      };
+    }
+  },
+});
+
 export const readTools = [
   searchSpotify,
   getNowPlaying,
@@ -979,4 +1022,5 @@ export const readTools = [
   getTopTracks,
   getTopArtists,
   getFollowedArtists,
+  followArtists,
 ];

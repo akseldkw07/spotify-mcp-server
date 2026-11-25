@@ -205,7 +205,7 @@ test('metadata advertises the full required scope set', async (t) => {
   const response = await raw(port, { method: 'GET', path: METADATA });
   const metadata = JSON.parse(response.body);
   assert.deepEqual(metadata.scopes_supported, [...SPOTIFY_SCOPES]);
-  assert.equal(metadata.scopes_supported.length, 15);
+  assert.equal(metadata.scopes_supported.length, 16);
 });
 
 test('metadata endpoint is absent without auth mode', async (t) => {
